@@ -1,16 +1,16 @@
-# Predicting Future Income Based on Early-Life Factors
+# Student Performance Predictor: Insights into Student Performance and Contributing Factors
 
-This repository contains a Machine Learning (ML) project aimed at predicting the future income of students 20 years into the future based on early-life factors such as education, socioeconomic background, and demographics. The project leverages data provided by the Australian Bureau of Statistics (ABS) to build a predictive model that can guide students, educational institutions, and policymakers in making informed decisions about education and career paths.
+This repository contains a Machine Learning (ML) project aimed at analyzing and predicting student performance based on various contributing factors such as socioeconomic background, academic history, and extracurricular activities. The project leverages educational datasets to build predictive models that can help educators, policymakers, and students understand the key drivers of academic success and identify areas for improvement.
 
 # Business Problem
 
-- Educational institutions, policymakers and students often find it hard to predict their long-term financial outcomes based on early-life factors like education, socioeconomic background and demographics. A clearer understanding of these factors impact on future income can guide students in making more informed decisions about their education and career paths.
+- Educational institutions and policymakers often struggle to identify the key factors that influence student performance. Understanding how factors such as socioeconomic background, study habits, and extracurricular activities impact academic outcomes can help educators design targeted interventions and improve overall student success.
 
-- The Australia Bureau of Statistics (ABS) provides big data on education and employment trends, offering the chance to build a machine learning model that estimates a student’s income 20 years into the future. The model can provide insight into economic mobility and inform policy decisions aimed at improving financial outcomes for students from many backgrounds.
+- This project aims to provide actionable insights into the factors that contribute to student performance and develop predictive models to forecast academic outcomes based on these factors.
 
 # Machine Learning Problem
 
-- A Linear Regression model that predicts the income of students in high school, 20 years in the future based several input features given by students.
+- The goal is to develop a Machine Learning model that predicts student performance (e.g., GPA, test scores) based on several input features.
 
 # Success Metrics
 
@@ -21,7 +21,7 @@ To evaluate the performance of the machine learning model, the following success
 
 # Data Overview
 
-- I have sourced a raw validated dataset from The Australian Beauro of Statistics. The data is saved in the CSV file [2.1.2.Education_Income_Data.csv](/2.Model_Development/2.1.Data_Wrangling/2.1.2.Education_Income_Data.csv).
+- I have sourced a raw validated dataset from The Australian Beauro of Statistics. The data is saved in the CSV file [1.1.4.Student_Scores_Data.csv](/1.Model_Development/1.1.Data_Wrangling/1.1.4.Student_Scores_Data.csv).
 
 - The data columns are:
 
