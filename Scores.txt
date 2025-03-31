@@ -1,0 +1,7 @@
+filename = 'my_saved_model_v3sav'
+model_C = pickle.load(open(filename, 'rb'))
+    Score: 0.54
+
+model_filename = 'my_saved_model_multivariable.sav'
+poly_filename = 'my_saved_poly_multivariable.pkl'
+    Score: 0.56
