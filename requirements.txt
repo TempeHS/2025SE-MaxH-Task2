@@ -9,3 +9,16 @@ graphviz
 pydot-ng
 pillow
 pydotplus
+Flask
+flask_wtf
+flask-csp
+jsonschema
+requests
+flask_cors
+flask_limiter
+Flask
+SQLite3
+flask_wtf
+flask_csp
+jsonschema
+requests

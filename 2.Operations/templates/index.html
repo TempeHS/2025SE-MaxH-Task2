@@ -1,0 +1,80 @@
+{% extends "layout.html" %} {% block content %}
+<div class="container mt-4">
+  <h1 class="text-center mb-4">Student Exam Score Predictor</h1>
+  <form method="POST" action="{{ url_for('predict') }}">
+    {{ form.hidden_tag() }}
+
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="{{ form.Hours_Studied.id }}"
+            >{{ form.Hours_Studied.label }}</label
+          >
+          {{ form.Hours_Studied(class="form-control") }} {% if
+          form.Hours_Studied.errors %}
+          <div class="text-danger">
+            {% for error in form.Hours_Studied.errors %}
+            <small>{{ error }}</small>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="{{ form.Attendance.id }}"
+            >{{ form.Attendance.label }}</label
+          >
+          {{ form.Attendance(class="form-control") }} {% if
+          form.Attendance.errors %}
+          <div class="text-danger">
+            {% for error in form.Attendance.errors %}
+            <small>{{ error }}</small>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="{{ form.Previous_Scores.id }}"
+        >{{ form.Previous_Scores.label }}</label
+      >
+      {{ form.Previous_Scores(class="form-control") }} {% if
+      form.Previous_Scores.errors %}
+      <div class="text-danger">
+        {% for error in form.Previous_Scores.errors %}
+        <small>{{ error }}</small>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-block mt-3">
+      {{ form.submit.label }}
+    </button>
+  </form>
+
+  {% with messages = get_flashed_messages(with_categories=true) %} {% if
+  messages %}
+  <div class="flash-messages mt-3">
+    {% for category, message in messages %}
+    <div
+      class="alert alert-{{ category }} alert-dismissible fade show"
+      role="alert"
+    >
+      {{ message }}
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %} {% endwith %}
+</div>
+{% endblock %}
