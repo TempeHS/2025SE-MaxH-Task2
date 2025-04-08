@@ -12,7 +12,6 @@ HEADERS = {"Authorisation": "uPTPeF9BDNiqAkNj"}
 def predict():
     form = StudentScoreForm()
     if form.validate_on_submit():
-        # Collect form data
         input_data = {
             "Hours_Studied": form.Hours_Studied.data,
             "Attendance": form.Attendance.data,
@@ -36,8 +35,8 @@ def predict():
         }
 
         try:
-            # Send data to API
             response = requests.post(API_URL, json=input_data, headers=HEADERS)
+            print(f"API Response: {response.status_code}, {response.text}")  # Debugging line
             response_data = response.json()
 
             if response.status_code == 200:
@@ -45,8 +44,8 @@ def predict():
             else:
                 flash(f"Error: {response_data.get('message', 'Unknown error')}", "danger")
         except Exception as e:
+            print(f"Error connecting to API: {e}")  # Debugging line
             flash(f"Error connecting to API: {str(e)}", "danger")
-
         return redirect("/")
     return render_template("index.html", form=form)
 

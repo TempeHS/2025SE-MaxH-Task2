@@ -12,13 +12,26 @@ auth_key = "uPTPeF9BDNiqAkNj"
 limiter = Limiter(get_remote_address, app=api, default_limits=["200 per day", "50 per hour"])
 
 MLmodel = MLModel()
-MLmodel.load_model("operations_models/5degpolymulti.sav", "operations_models/5degpolymulti.pkl")
+MLmodel.load_model(
+    "operations_models/5degpolymulti.sav",
+    "operations_models/5degpolymulti.pkl",
+    "operations_models/scaling_params.pkl"  
+)
 
 logging.basicConfig(filename="api_security_log.log", level=logging.DEBUG, format="%(asctime)s %(levelname)s %(message)s")
 
 def check_api_key():
     if request.headers.get("Authorisation") != auth_key:
         return jsonify({"message": "Invalid or missing API key"}), 401
+
+@api.route("/", methods=["GET"])
+def home():
+    return jsonify({
+        "message": "Welcome to the Prediction API!",
+        "endpoints": {
+            "/api/prediction": "POST - Make predictions",
+        }
+    }), 200
 
 @api.route("/api/prediction", methods=["POST"])
 @limiter.limit("1/second")
@@ -30,8 +43,14 @@ def prediction():
         data = request.get_json()
         if not data:
             return jsonify({"message": "No input data provided"}), 400
+        
+        logging.debug(f"Received input data: {data}")
+        
         prediction = MLmodel.predict(data)
         return jsonify({"prediction": prediction})
+    except ValueError as ve:
+        logging.error(f"Validation error: {ve}")
+        return jsonify({"message": str(ve)}), 400
     except Exception as e:
         logging.error(f"Error in prediction: {e}")
         return jsonify({"message": "Error processing the request"}), 500

@@ -1,80 +1,48 @@
 {% extends "layout.html" %} {% block content %}
 <div class="container mt-4">
   <h1 class="text-center mb-4">Student Exam Score Predictor</h1>
-  <form method="POST" action="{{ url_for('predict') }}">
+  <form method="POST" action="/">
     {{ form.hidden_tag() }}
-
-    <div class="row">
-      <div class="col-md-6">
-        <div class="form-group">
-          <label for="{{ form.Hours_Studied.id }}"
-            >{{ form.Hours_Studied.label }}</label
-          >
-          {{ form.Hours_Studied(class="form-control") }} {% if
-          form.Hours_Studied.errors %}
-          <div class="text-danger">
-            {% for error in form.Hours_Studied.errors %}
-            <small>{{ error }}</small>
-            {% endfor %}
-          </div>
-          {% endif %}
-        </div>
-      </div>
-
-      <div class="col-md-6">
-        <div class="form-group">
-          <label for="{{ form.Attendance.id }}"
-            >{{ form.Attendance.label }}</label
-          >
-          {{ form.Attendance(class="form-control") }} {% if
-          form.Attendance.errors %}
-          <div class="text-danger">
-            {% for error in form.Attendance.errors %}
-            <small>{{ error }}</small>
-            {% endfor %}
-          </div>
-          {% endif %}
-        </div>
-      </div>
+    <div>{{ form.Hours_Studied.label }} {{ form.Hours_Studied }}</div>
+    <div>{{ form.Attendance.label }} {{ form.Attendance }}</div>
+    <div>
+      {{ form.Parental_Involvement.label }} {{ form.Parental_Involvement }}
     </div>
-
-    <div class="form-group">
-      <label for="{{ form.Previous_Scores.id }}"
-        >{{ form.Previous_Scores.label }}</label
-      >
-      {{ form.Previous_Scores(class="form-control") }} {% if
-      form.Previous_Scores.errors %}
-      <div class="text-danger">
-        {% for error in form.Previous_Scores.errors %}
-        <small>{{ error }}</small>
-        {% endfor %}
-      </div>
-      {% endif %}
+    <div>
+      {{ form.Access_to_Resources.label }} {{ form.Access_to_Resources }}
     </div>
-
-    <button type="submit" class="btn btn-primary btn-block mt-3">
-      {{ form.submit.label }}
-    </button>
+    <div>
+      {{ form.Extracurricular_Activities.label }} {{
+      form.Extracurricular_Activities }}
+    </div>
+    <div>{{ form.Sleep_Hours.label }} {{ form.Sleep_Hours }}</div>
+    <div>{{ form.Previous_Scores.label }} {{ form.Previous_Scores }}</div>
+    <div>{{ form.Motivation_Level.label }} {{ form.Motivation_Level }}</div>
+    <div>{{ form.Internet_Access.label }} {{ form.Internet_Access }}</div>
+    <div>{{ form.Tutoring_Sessions.label }} {{ form.Tutoring_Sessions }}</div>
+    <div>{{ form.Family_Income.label }} {{ form.Family_Income }}</div>
+    <div>{{ form.Teacher_Quality.label }} {{ form.Teacher_Quality }}</div>
+    <div>{{ form.School_Type.label }} {{ form.School_Type }}</div>
+    <div>{{ form.Peer_Influence.label }} {{ form.Peer_Influence }}</div>
+    <div>{{ form.Physical_Activity.label }} {{ form.Physical_Activity }}</div>
+    <div>
+      {{ form.Learning_Disabilities.label }} {{ form.Learning_Disabilities }}
+    </div>
+    <div>
+      {{ form.Parental_Education_Level.label }} {{ form.Parental_Education_Level
+      }}
+    </div>
+    <div>{{ form.Distance_from_Home.label }} {{ form.Distance_from_Home }}</div>
+    <div>{{ form.Gender.label }} {{ form.Gender }}</div>
+    <div>{{ form.submit }}</div>
   </form>
 
   {% with messages = get_flashed_messages(with_categories=true) %} {% if
   messages %}
-  <div class="flash-messages mt-3">
+  <div class="container mt-3">
     {% for category, message in messages %}
-    <div
-      class="alert alert-{{ category }} alert-dismissible fade show"
-      role="alert"
-    >
-      {{ message }}
-      <button
-        type="button"
-        class="btn-close"
-        data-bs-dismiss="alert"
-        aria-label="Close"
-      ></button>
-    </div>
+    <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
     {% endfor %}
   </div>
-  {% endif %} {% endwith %}
+  {% endif %} {% endwith %} {% endblock %}
 </div>
-{% endblock %}
