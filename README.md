@@ -18,6 +18,7 @@ To evaluate the performance of the machine learning model, the following success
 
 - Does the model generalise well to training data, testing data and new data that has been caputured during operation
 - Does the model score a low Mean Squared Error(MSE)
+- Model is updateable and continuously able to be retrained with user input data and results
 
 # Data Overview
 
@@ -47,65 +48,27 @@ To evaluate the performance of the machine learning model, the following success
   | Gender | Gender of the student (e.g., Male/Female). |
   | Exam_Score | Final exam score of the student (target variable). |
 
-# Project Title
+# How to execute program
 
-Simple overview of use/purpose.
+- Install required dependencies with:
 
-## Description
+  ```bash
+    pip install -r requirements.txt
+  ```
 
-An in-depth paragraph about your project and overview of use.
+- Numerically go through jupyter notebooks starting from Data Preview until you are up to Model Deployment.
+- After wrangling data, engineering features, evaluating the most accurate model and saving the model in 2.Operations/operations_models deploy the API using:
 
-## Getting Started
+  ```bash
+  python api.py
+  ```
 
-### Dependencies
+- And in a new terminal
 
-- Describe any prerequisites, libraries, OS version, etc., needed before installing program.
-- ex. Windows 10
+  ```bash
+  python main.py
+  ```
 
-### Installing
+- You will be able to open API in the browser on port http://127.0.0.1:5000 and let others make predictions for their upcoming exam.
 
-- How/where to download your program
-- Any modifications needed to be made to files/folders
-
-### Executing program
-
-- How to run the program
-- Step-by-step bullets
-
-```
-code blocks for commands
-```
-
-## Help
-
-Any advise for common problems or issues.
-
-```
-command to run if program contains helper info
-```
-
-## Authors
-
-Contributors names and contact info
-
-ex. Mr Jones
-ex. [@benpaddlejones](https://github.com/benpaddlejones)
-
-## Version History
-
-- 0.2
-  - Various bug fixes and optimizations
-  - See [commit change]() or See [release history]() or see [branch]()
-- 0.1
-  - Initial Release
-
-## License
-
-This project is licensed under the [NAME HERE] License - see the LICENSE.md file for details
-
-## Acknowledgments
-
-Inspiration, code snippets, etc.
-
-- [Github md syntax](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)
 - [TempeHS Jupyter-Notebook template](https://github.com/TempeHS/TempeHS_Jupyter-Notebook_DevContainer)

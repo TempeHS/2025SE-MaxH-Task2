@@ -37,12 +37,18 @@
     <div>{{ form.submit }}</div>
   </form>
 
-  {% with messages = get_flashed_messages(with_categories=true) %} {% if
-  messages %}
+  {% if save_prompt %}
+  <form method="POST" action="/">
+    <input type="hidden" name="save_inputs" value="yes" />
+    <button type="submit" class="btn btn-primary mt-3">Save Inputs</button>
+  </form>
+  {% endif %} {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
   <div class="container mt-3">
     {% for category, message in messages %}
     <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
     {% endfor %}
   </div>
-  {% endif %} {% endwith %} {% endblock %}
+  {% endif %} {% endwith %}
 </div>
+{% endblock %}

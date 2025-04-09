@@ -1,12 +1,47 @@
-from flask import Flask, render_template, request, flash, redirect
+from flask import Flask, render_template, request, flash, redirect, url_for
 from forms import StudentScoreForm
 import requests
+import sqlite3  # For database operations
 
 app = Flask(__name__)
 app.secret_key = "your_secret_key"
 
 API_URL = "http://127.0.0.1:3000/api/prediction"
 HEADERS = {"Authorisation": "uPTPeF9BDNiqAkNj"}
+
+# Database setup
+DATABASE = "user_inputs.db"
+
+def init_db():
+    """Initialize the database and create the table if it doesn't exist."""
+    conn = sqlite3.connect(DATABASE)
+    cursor = conn.cursor()
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS user_inputs (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            Hours_Studied REAL,
+            Attendance REAL,
+            Parental_Involvement REAL,
+            Access_to_Resources REAL,
+            Extracurricular_Activities INTEGER,
+            Sleep_Hours REAL,
+            Previous_Scores REAL,
+            Motivation_Level REAL,
+            Internet_Access INTEGER,
+            Tutoring_Sessions REAL,
+            Family_Income REAL,
+            Teacher_Quality REAL,
+            School_Type REAL,
+            Peer_Influence REAL,
+            Physical_Activity REAL,
+            Learning_Disabilities INTEGER,
+            Parental_Education_Level REAL,
+            Distance_from_Home REAL,
+            Gender REAL
+        )
+    """)
+    conn.commit()
+    conn.close()
 
 @app.route("/", methods=["GET", "POST"])
 def predict():
@@ -35,19 +70,51 @@ def predict():
         }
 
         try:
+            # Send the input data to the prediction API
             response = requests.post(API_URL, json=input_data, headers=HEADERS)
-            print(f"API Response: {response.status_code}, {response.text}")  # Debugging line
             response_data = response.json()
 
             if response.status_code == 200:
+                print("Input Data Sent to API:", input_data)
                 flash(f"Predicted Exam Score: {response_data['prediction']}", "success")
+
+                # Store the input data in the session for saving later
+                request.session = input_data
+
+                # Prompt the user to save their inputs
+                flash("Do you want to save your inputs for future model training?", "info")
+                return render_template("index.html", form=form, save_prompt=True)
+
             else:
                 flash(f"Error: {response_data.get('message', 'Unknown error')}", "danger")
         except Exception as e:
-            print(f"Error connecting to API: {e}")  # Debugging line
             flash(f"Error connecting to API: {str(e)}", "danger")
-        return redirect("/")
-    return render_template("index.html", form=form)
+
+    # Handle saving inputs if the user presses the "Save" button
+    if request.method == "POST" and request.form.get("save_inputs") == "yes":
+        try:
+            input_data = request.session
+            if not input_data:
+                flash("No input data found to save.", "danger")
+                return render_template("index.html", form=form, save_prompt=False)
+            conn = sqlite3.connect(DATABASE)
+            cursor = conn.cursor()
+            cursor.execute("""
+                INSERT INTO user_inputs (
+                    Hours_Studied, Attendance, Parental_Involvement, Access_to_Resources,
+                    Extracurricular_Activities, Sleep_Hours, Previous_Scores, Motivation_Level,
+                    Internet_Access, Tutoring_Sessions, Family_Income, Teacher_Quality,
+                    School_Type, Peer_Influence, Physical_Activity, Learning_Disabilities,
+                    Parental_Education_Level, Distance_from_Home, Gender
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, tuple(request.session.values()))
+            conn.commit()
+            conn.close()
+            flash("Your inputs have been saved successfully!", "success")
+        except Exception as e:
+            flash(f"Error saving inputs: {str(e)}", "danger")    
+    return render_template("index.html", form=form, save_prompt=False)
 
 if __name__ == "__main__":
+    init_db()  # Initialize the database
     app.run(debug=True, host="0.0.0.0", port=5000)

@@ -4,6 +4,7 @@ from flask_cors import CORS
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from model import MLModel
+import sqlite3
 
 api = Flask(__name__)
 CORS(api)
@@ -54,6 +55,25 @@ def prediction():
     except Exception as e:
         logging.error(f"Error in prediction: {e}")
         return jsonify({"message": "Error processing the request"}), 500
+
+@api.route("/api/user_inputs", methods=["GET"])
+def get_user_inputs():
+    """Retrieve all saved user inputs."""
+    conn = sqlite3.connect("user_inputs.db")
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM user_inputs")
+    rows = cursor.fetchall()
+    conn.close()
+
+    columns = [
+        "id", "Hours_Studied", "Attendance", "Parental_Involvement", "Access_to_Resources",
+        "Extracurricular_Activities", "Sleep_Hours", "Previous_Scores", "Motivation_Level",
+        "Internet_Access", "Tutoring_Sessions", "Family_Income", "Teacher_Quality",
+        "School_Type", "Peer_Influence", "Physical_Activity", "Learning_Disabilities",
+        "Parental_Education_Level", "Distance_from_Home", "Gender"
+    ]
+    user_inputs = [dict(zip(columns, row)) for row in rows]
+    return jsonify(user_inputs)
 
 if __name__ == "__main__":
     api.run(debug=True, host="0.0.0.0", port=3000)

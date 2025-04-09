@@ -1,6 +1,7 @@
 import pickle
 import numpy as np
 import pandas as pd
+import sqlite3
 from sklearn.preprocessing import PolynomialFeatures
 
 class MLModel:
@@ -26,6 +27,10 @@ class MLModel:
             print(f"Error loading model, transformer, or scaling parameters: {e}")
 
     def preprocess_input(self, input_data):
+        """
+        Preprocess raw user input data for the machine learning model.
+        This includes scaling the data and creating engineered features.
+        """
         input_df = pd.DataFrame([input_data])
         print("Raw Input Data (before scaling):")
         print(input_df)
@@ -51,6 +56,16 @@ class MLModel:
             if column in input_df:
                 input_df[column] = input_df[column].map(mapping)
 
+        # Scale numerical features using saved min-max values
+        if self.scaling_params:
+            for feature in self.scaling_params:
+                if feature in input_df:
+                    min_val, max_val = self.scaling_params[feature]
+                    input_df[feature] = (input_df[feature] - min_val) / (max_val - min_val)
+
+        print("Scaled Input Data:")
+        print(input_df)
+
         # Create engineered features
         input_df["Knowledge"] = input_df["Hours_Studied"] * input_df["Previous_Scores"]
         input_df["Engagement"] = input_df["Attendance"] * input_df["Hours_Studied"]
@@ -62,20 +77,48 @@ class MLModel:
         # Fill missing values for optional features with defaults
         input_df.fillna(0, inplace=True)
 
-        # Scale numerical features using saved min-max values
-        if self.scaling_params:
-            for feature in model_features:
-                if feature in self.scaling_params:
-                    min_val, max_val = self.scaling_params[feature]
-                    input_df[feature] = (input_df[feature] - min_val) / (max_val - min_val)
-
-        # Log the scaled inputs for debugging
-        print("Scaled Input Data:")
+        # Log the processed inputs for debugging
+        print("Processed Input Data (with engineered features):")
         print(input_df)
 
         # Transform input data using the polynomial transformer
         poly_features = self.poly_transformer.transform(input_df)
         return poly_features
+
+    def preprocess_user_inputs(self, database_path="user_inputs.db"):
+        """Load and preprocess user inputs from the database."""
+        try:
+            # Load user inputs from the database
+            conn = sqlite3.connect(database_path)
+            user_inputs = pd.read_sql_query("SELECT * FROM user_inputs", conn)
+            conn.close()
+
+            # Preprocess the inputs
+            print("Raw User Inputs from Database:")
+            print(user_inputs.head())
+
+            # Apply the same preprocessing as in preprocess_input
+            user_inputs["Knowledge"] = user_inputs["Hours_Studied"] / user_inputs["Previous_Scores"]
+            user_inputs["Engagement"] = user_inputs["Attendance"] / user_inputs["Hours_Studied"]
+
+            # Select only the required features for the model
+            model_features = ["Engagement", "Knowledge", "Attendance"]
+            user_inputs = user_inputs[model_features]
+
+            # Scale numerical features using saved min-max values
+            if self.scaling_params:
+                for feature in model_features:
+                    if feature in self.scaling_params:
+                        min_val, max_val = self.scaling_params[feature]
+                        user_inputs[feature] = (user_inputs[feature] - min_val) / (max_val - min_val)
+
+            print("Preprocessed User Inputs:")
+            print(user_inputs.head())
+
+            return user_inputs
+        except Exception as e:
+            print(f"Error preprocessing user inputs: {e}")
+            raise
 
     def predict(self, input_data):
         if not self.model or not self.poly_transformer:
