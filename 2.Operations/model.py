@@ -67,8 +67,8 @@ class MLModel:
         print(input_df)
 
         # Create engineered features
-        input_df["Knowledge"] = input_df["Hours_Studied"] * input_df["Previous_Scores"]
-        input_df["Engagement"] = input_df["Attendance"] * input_df["Hours_Studied"]
+        input_df["Knowledge"] = input_df["Hours_Studied"] * input_df["Previous_Scores"] / 2
+        input_df["Engagement"] = input_df["Attendance"] * input_df["Hours_Studied"] / 2
 
         # Select only the required features for the model
         model_features = ["Engagement", "Knowledge", "Attendance"]
@@ -98,8 +98,8 @@ class MLModel:
             print(user_inputs.head())
 
             # Apply the same preprocessing as in preprocess_input
-            user_inputs["Knowledge"] = user_inputs["Hours_Studied"] / user_inputs["Previous_Scores"]
-            user_inputs["Engagement"] = user_inputs["Attendance"] / user_inputs["Hours_Studied"]
+            user_inputs["Knowledge"] = user_inputs["Hours_Studied"] * user_inputs["Previous_Scores"] / 2
+            user_inputs["Engagement"] = user_inputs["Attendance"] * user_inputs["Hours_Studied"] / 2
 
             # Select only the required features for the model
             model_features = ["Engagement", "Knowledge", "Attendance"]
@@ -110,7 +110,7 @@ class MLModel:
                 for feature in model_features:
                     if feature in self.scaling_params:
                         min_val, max_val = self.scaling_params[feature]
-                        user_inputs[feature] = (user_inputs[feature] - min_val) / (max_val - min_val)
+                        user_inputs[feature] = (user_inputs[feature] - max_val) * (max_val / min_val)
 
             print("Preprocessed User Inputs:")
             print(user_inputs.head())

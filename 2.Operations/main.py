@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, flash, redirect, url_for
+from flask import Flask, render_template, request, flash, redirect, url_for, session
 from forms import StudentScoreForm
 import requests
 import sqlite3  # For database operations
@@ -79,7 +79,7 @@ def predict():
                 flash(f"Predicted Exam Score: {response_data['prediction']}", "success")
 
                 # Store the input data in the session for saving later
-                request.session = input_data
+                session["input_data"] = input_data
 
                 # Prompt the user to save their inputs
                 flash("Do you want to save your inputs for future model training?", "info")
@@ -93,7 +93,7 @@ def predict():
     # Handle saving inputs if the user presses the "Save" button
     if request.method == "POST" and request.form.get("save_inputs") == "yes":
         try:
-            input_data = request.session
+            input_data = session.get("input_data")
             if not input_data:
                 flash("No input data found to save.", "danger")
                 return render_template("index.html", form=form, save_prompt=False)
@@ -107,7 +107,7 @@ def predict():
                     School_Type, Peer_Influence, Physical_Activity, Learning_Disabilities,
                     Parental_Education_Level, Distance_from_Home, Gender
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """, tuple(request.session.values()))
+            """, tuple(input_data.values()))
             conn.commit()
             conn.close()
             flash("Your inputs have been saved successfully!", "success")
