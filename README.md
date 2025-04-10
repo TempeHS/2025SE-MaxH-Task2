@@ -1,5 +1,7 @@
 # Student Performance Predictor: Insights into Student Performance and Contributing Factors
 
+!! This model only serves as a prediction and does not account for student's guarenteed results.
+
 This repository contains a Machine Learning (ML) project aimed at analyzing and predicting student performance based on various contributing factors such as socioeconomic background, academic history, and extracurricular activities. The project leverages educational datasets to build predictive models that can help educators, policymakers, and students understand the key drivers of academic success and identify areas for improvement.
 
 # Business Problem
