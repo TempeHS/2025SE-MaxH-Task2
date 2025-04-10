@@ -55,20 +55,22 @@ class MLModel:
         for column, mapping in encoding_map.items():
             if column in input_df:
                 input_df[column] = input_df[column].map(mapping)
+        
+        input_df["Knowledge"] = input_df["Hours_Studied"] / input_df["Previous_Scores"] / 27
+        input_df["Engagement"] = input_df["Attendance"] / input_df["Hours_Studied"] / 27
+        input_df["Attendance"] = input_df["Attendance"] / 100
 
-        # Scale numerical features using saved min-max values
+        engineered_features = ["Knowledge", "Engagement", "Attendance"]
+        
         if self.scaling_params:
-            for feature in self.scaling_params:
-                if feature in input_df:
+            for feature in engineered_features:
+                if feature in self.scaling_params:
                     min_val, max_val = self.scaling_params[feature]
                     input_df[feature] = (input_df[feature] - min_val) / (max_val - min_val)
 
         print("Scaled Input Data:")
         print(input_df)
 
-        # Create engineered features
-        input_df["Knowledge"] = input_df["Hours_Studied"] * input_df["Previous_Scores"] / 2
-        input_df["Engagement"] = input_df["Attendance"] * input_df["Hours_Studied"] / 2
 
         # Select only the required features for the model
         model_features = ["Engagement", "Knowledge", "Attendance"]
