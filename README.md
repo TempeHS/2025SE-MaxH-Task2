@@ -50,27 +50,76 @@ To evaluate the performance of the machine learning model, the following success
   | Gender | Gender of the student (e.g., Male/Female). |
   | Exam_Score | Final exam score of the student (target variable). |
 
-# How to execute program
+# MLOps Pipeline Automation for Student Exam Score Predictor
 
-- Install required dependencies with:
+This repository contains a Machine Learning (ML) project aimed at automating the development, deployment, and operation of a predictive model for student exam scores. The project is divided into two main phases: **Model Development** and **Operations**.
 
-  ```bash
-    pip install -r requirements.txt
-  ```
+---
 
-- Numerically go through jupyter notebooks starting from Data Preview until you are up to Model Deployment.
-- After wrangling data, engineering features, evaluating the most accurate model and saving the model in 2.Operations/operations_models deploy the API using:
+## 1. MLOps Model Development Phase
 
-  ```bash
-  python api.py
-  ```
+### 1.1 Data Wrangling
 
-- And in a new terminal
+- The [Data Preview Jupyter Notebook](/1.Model_Development/1.1.Data_Wrangling/data_preview.ipynb) provides an overview and understanding of the dataset using snapshots, data summaries, graphs, and descriptive statistics.
+- The [Data Wrangling Jupyter Notebook](/1.Model_Development/1.1.Data_Wrangling/data_wrangling.ipynb) demonstrates the data wrangling processes using the Pandas library and Matplotlib.
+- The [Data Records Documentation](/1.Model_Development/1.1.Data_Wrangling/data.records.md) contains detailed documentation of all scaling and encoding steps performed during data wrangling and feature engineering.
 
-  ```bash
-  python main.py
-  ```
+### 1.2 Feature Engineering
 
-- You will be able to open API in the browser on port http://127.0.0.1:5000 and let others make predictions for their upcoming exam.
+- The [Feature Engineering Jupyter Notebook](/1.Model_Development/1.2.Feature_Engineering/feature_engineering.ipynb) shows how new features were created or existing ones were modified to improve model performance.
 
-- [TempeHS Jupyter-Notebook template](https://github.com/TempeHS/TempeHS_Jupyter-Notebook_DevContainer)
+### 1.3 Model Training
+
+- The [Splitting Training and Testing Data Jupyter Notebook](/1.Model_Development/1.3.Model_Training/split_training_and_testing_data.ipynb) explains how the dataset was divided into training and testing sets for model evaluation.
+- The [Linear Regression Jupyter Notebook](/1.Model_Development/1.3.Model_Training/linear_regression.ipynb) demonstrates how a linear regression model was trained using the engineered features to predict student exam scores.
+
+### 1.4 Model Testing and Validation
+
+- The [Model Testing and Validation Jupyter Notebook](/1.Model_Development/1.4.Model_Testing_and_Validation/model_evaluation.ipynb) shows how the model was evaluated, tested, and validated using a separate test dataset to refine its performance.
+
+---
+
+## 2. MLOps Operations Phase
+
+### How to Use the Model
+
+#### Running Required Files
+
+1. **Start the API**:
+   Navigate to the `2.Operations` directory and run the API server:
+   ```bash
+   cd 2.Operations
+   python api.py
+   ```
+
+2. **Start the Web Application**:
+   In a new terminal, navigate to the `2.Operations` directory and run the main application:
+   ```bash
+   cd 2.Operations
+   python main.py
+   ```
+
+3. **Access the Application**:
+   Open your browser and navigate to [http://127.0.0.1:5000](http://127.0.0.1:5000) to use the Student Exam Score Predictor.
+
+---
+
+## Disclaimer
+
+**Note:** The results provided by this model are only predictions and should not be taken as guaranteed marks. Please use them as guidance only.
+
+---
+
+## Dependencies
+
+Install the required dependencies with:
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## Acknowledgments
+
+This project was developed to provide insights into student performance and help educators and policymakers make data-driven decisions.
